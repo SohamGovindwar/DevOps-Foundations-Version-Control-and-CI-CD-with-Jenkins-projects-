@@ -5,13 +5,14 @@ pipeline {
         string(name: 'GIT_COMMIT', defaultValue: '', description: 'Commit SHA or branch to build')
     }
 
-    environment {
-        TOMCAT_USER = 'admin'
-        TOMCAT_PASS = 'Root123$'
-        TOMCAT_HOST = '13.203.41.244'
-        APP_CONTEXT = '/insured-assurance'
-        MAVEN_OPTS = '-B -DskipTests=false'
-    }
+   environment {
+    TOMCAT_USER = 'admin'
+    TOMCAT_PASS = 'Root123$'
+    TOMCAT_HOST = '13.203.41.244'
+    APP_CONTEXT = '/insured-assurance'
+    // Remove MAVEN_OPTS = '-B -DskipTests=false'
+}
+
 
     options {
         timestamps()                             // Add timestamps in console
@@ -54,7 +55,7 @@ pipeline {
     }
     steps {
         echo "Building project using Maven..."
-        sh 'mvn clean package'
+        sh 'mvn clean package'  // remove -B
     }
 }
 
