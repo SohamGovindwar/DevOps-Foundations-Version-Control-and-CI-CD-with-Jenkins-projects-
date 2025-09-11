@@ -1,4 +1,4 @@
-# Insured Assurance - CI/CD Example (GitHub Actions -> Jenkins -> Tomcat)
+# Insured Assurance - CI/CD  (GitHub Actions -> Jenkins -> Tomcat)
 
 This package contains a minimal Java **WAR** web application and CI/CD configuration that demonstrates:
 1. A tiny Java Servlet webapp (Maven -> WAR).
