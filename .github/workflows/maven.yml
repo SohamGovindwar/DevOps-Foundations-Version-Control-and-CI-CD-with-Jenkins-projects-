@@ -1,0 +1,47 @@
+name: CI - Build & Trigger Jenkins CD
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      JENKINS_URL: ${{ secrets.JENKINS_URL }}
+      JENKINS_JOB: ${{ secrets.JENKINS_JOB }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests=false clean package
+
+      - name: Upload artifact (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-war
+          path: target/*.war
+
+      - name: Trigger Jenkins job (remote build)
+        env:
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}
+          JENKINS_TOKEN: ${{ secrets.JENKINS_API_TOKEN }}
+        run: |
+          set -e
+          if [ -z "$JENKINS_URL" ]; then echo "JENKINS_URL secret is empty"; exit 1; fi
+          CRUMB_JSON=$(curl -s --user "$JENKINS_USER:$JENKINS_TOKEN" "$JENKINS_URL/crumbIssuer/api/json" || true)
+          if [ -n "$CRUMB_JSON" ] && echo "$CRUMB_JSON" | grep -q '"crumb"'; then
+            CRUMB=$(echo "$CRUMB_JSON" | python3 -c "import sys,json; print(json.load(sys.stdin)['crumb'])")
+            CRUMB_HEADER="Jenkins-Crumb:$CRUMB"
+          else
+            CRUMB_HEADER=""
+          fi
+          echo "Triggering Jenkins job $JENKINS_JOB for commit $GITHUB_SHA"
+          curl -X POST "$JENKINS_URL/job/$JENKINS_JOB/buildWithParameters"                     --user "$JENKINS_USER:$JENKINS_TOKEN"                     -H "$CRUMB_HEADER"                     --data-urlencode "GIT_COMMIT=${GITHUB_SHA}"
