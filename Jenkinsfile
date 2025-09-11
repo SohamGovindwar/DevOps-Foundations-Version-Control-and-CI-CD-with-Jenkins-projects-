@@ -5,13 +5,13 @@ pipeline {
         string(name: 'GIT_COMMIT', defaultValue: '', description: 'Commit SHA or branch to build')
     }
 
-   environment {
+  environment {
     TOMCAT_USER = 'admin'
     TOMCAT_PASS = 'Root123$'
-    TOMCAT_HOST = '13.203.41.244'
+    TOMCAT_HOST = 'localhost'   // changed from 13.203.41.244
     APP_CONTEXT = '/insured-assurance'
-    // Remove MAVEN_OPTS = '-B -DskipTests=false'
 }
+
 
 
     options {
