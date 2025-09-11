@@ -38,13 +38,26 @@ pipeline {
                 }
             }
         }
+        stage('Debug Java') {
+    steps {
+        sh 'java -version'
+        sh 'echo $JAVA_HOME'
+        sh 'mvn -v'
+    }
+}
 
-        stage('Build') {
-            steps {
-                echo "Building project using Maven..."
-                sh "mvn ${env.MAVEN_OPTS} clean package"
-            }
-        }
+
+       stage('Build') {
+    tools {
+        jdk 'jdk21'
+        maven 'maven3'
+    }
+    steps {
+        echo "Building project using Maven..."
+        sh 'mvn clean package'
+    }
+}
+
 
         stage('Deploy') {
             steps {
