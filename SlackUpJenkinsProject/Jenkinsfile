@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building SlackUpJenkins project...'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+            }
+        }
+    }
+    post {
+        success {
+            slackSend(channel: '#jenkins-builds',
+                      message: "✅ ${env.JOB_NAME} #${env.BUILD_NUMBER} succeeded! ${env.BUILD_URL}")
+        }
+        failure {
+            slackSend(channel: '#jenkins-builds',
+                      message: "❌ ${env.JOB_NAME} #${env.BUILD_NUMBER} failed! ${env.BUILD_URL}")
+        }
+    }
+}

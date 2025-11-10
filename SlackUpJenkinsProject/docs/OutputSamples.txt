@@ -1,0 +1,8 @@
+Build #1 SUCCESS
+[Jenkins] SlackTestJob #1 SUCCESS — http://localhost:8080/job/SlackTestJob/1/
+
+Slack Slash Command:
+User: admin
+Command: /deploy-app
+Response: 🧩 Received deploy command from admin. Triggering Jenkins build...
+Jenkins console log shows remote trigger received.

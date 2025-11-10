@@ -1,0 +1,9 @@
+# Rename to .env and fill values
+SLACK_BOT_TOKEN=xoxb-your-bot-token
+SLACK_SIGNING_SECRET=your-signing-secret
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/XXX/YYY/ZZZ
+JENKINS_URL=http://localhost:8080
+JENKINS_USER=admin
+JENKINS_API_TOKEN=jenkins-api-token
+JENKINS_JOB_NAME=SlackTestJob
+JENKINS_TOKEN=MYTOKEN123
